@@ -139,22 +139,22 @@ Location: {{location}}`,
     category: 'visualPrompt',
     template: `Generate three prompts (concise, normal, and detailed) based on the following information:
 
-Subjects: {{subject_info}}
-Shot Description: {{shot_description}}
-Director's Notes: {{directors_notes}}
-Highlighted Script: {{highlighted_text}}
-Full Script: {{full_script}}
-End Parameters: {{end_parameters}}
-Style: {{style}}
-Style Prefix: {{style_prefix}}
-Director's Style: {{director_style}}
-Camera Shot: {{camera_shot}}
-Camera Move: {{camera_move}}
-Camera Size: {{camera_size}}
-Framing: {{camera_framing}}
-Depth of Field: {{camera_depth_of_field}}
-Camera Type: {{camera_type}}
-Camera Name: {{camera_name}}
+Subjects: "{subject_info}"
+Shot Description: "{shot_description}"
+Director's Notes: "{directors_notes}"
+Highlighted Script: "{highlighted_text}"
+Full Script: "{full_script}"
+End Parameters: "{end_parameters}"
+Style: "{style}"
+Style Prefix: "{style_prefix}"
+Director's Style: "{director_style}"
+Camera Shot: "{camera_shot}"
+Camera Move: "{camera_move}"
+Camera Size: "{camera_size}"
+Framing: "{camera_framing}"
+Depth of Field: "{camera_depth_of_field}"
+Camera Type: "{camera_type}"
+Camera Name: "{camera_name}"
 
 Important:
 1. Integrate Camera Work Seamlessly: Incorporate the camera work description seamlessly into the scene description.
@@ -191,9 +191,9 @@ Important:
 8. Ensure Consistency Across Prompts: Prioritize the most important visual elements for each shot type to maintain consistency across the three prompt lengths.
 9. Balance Elements in Each Prompt: For each prompt length, maintain a balance between character details, setting description, and action appropriate to the shot type and framing.
 10. Include Relevant Subject Details: Incorporate descriptions of active subjects provided in the 'Subjects' field into the prompts, but only include details visible in the current shot type.
-11. Script Adherence: {{script_adherence}}
+11. Script Adherence: {script_adherence}
 12. Avoid Unnecessary Phrases: Do not include meta-commentary or evaluative statements about the composition, such as "The overall composition captures...". Focus on directly describing the scene.
-13. Position of Camera Name: Place the camera name at the end of the normal and detailed prompts ONLY if it is included. It is not a priority item like shot size and should not be included in the concise prompt unless essential. It should be worded "Shot on a {{camera_name}}"
+13. Position of Camera Name: Place the camera name at the end of the normal and detailed prompts ONLY if it is included. It is not a priority item like shot size and should not be included in the concise prompt unless essential. It should be worded "Shot on a {camera_name} "
 14. Describing Multiple Subjects:
    - Clearly identify each subject in the scene.
    - For close-ups and medium shots, focus on the interaction between subjects, their expressions, and body language.

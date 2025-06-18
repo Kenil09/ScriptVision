@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import type { Shot, Subject } from '@/lib/types';
+import { Shot, Subject, CameraSettings } from '@/lib/types';
 import { AlertCircle, Copy, Download, Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -45,7 +45,7 @@ export default function PromptsTab() {
 
   const [selectedShot, setSelectedShot] = useState<Shot | null>(null);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [cameraSettings, setCameraSettings] = useState({
+  const [cameraSettings, setCameraSettings] = useState<CameraSettings>({
     shot: 'none',
     move: 'none',
     size: 'none',
@@ -154,7 +154,7 @@ export default function PromptsTab() {
       // Filter out "none" values from camera settings
       const filteredCameraSettings = Object.fromEntries(
         Object.entries(cameraSettings).filter(([_, value]) => value !== 'none')
-      );
+      ) as CameraSettings;
 
       await generatePrompt(
         selectedShot,
@@ -331,7 +331,7 @@ export default function PromptsTab() {
       // Filter out "none" values from camera settings
       const filteredCameraSettings = Object.fromEntries(
         Object.entries(cameraSettings).filter(([_, value]) => value !== 'none')
-      );
+      ) as CameraSettings;
 
       const activeSubjects = subjects.filter(
         (subject) => subject.active && selectedSubjects.includes(subject.id)

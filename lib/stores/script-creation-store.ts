@@ -116,6 +116,9 @@ interface ScriptCreationState {
     maxResults: string;
   }) => void;
 
+  // Clear filters research
+  clearFilters: () => void;
+
   // Actions
   setStoryTheme: (theme: string) => void;
   setStoryTitle: (title: string) => void;
@@ -367,6 +370,20 @@ export const useScriptCreationStore = create<ScriptCreationState>()(
         get().setKeytoState('searchParams', params);
       },
 
+      // clear filters
+      clearFilters: () => {
+        set({
+          searchParams: {
+            publishedAfter: '',
+            publishedBefore: '',
+            relevanceLanguage: '',
+            regionCode: '',
+            order: '',
+            videoDuration: '',
+            maxResults: '',
+          },
+        });
+      },
       // Update the toggleTranscriptSelection function to include the source field
       toggleTranscriptSelection: (id) => {
         set((state) => {

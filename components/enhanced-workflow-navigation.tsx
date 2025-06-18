@@ -216,7 +216,7 @@ export function EnhancedWorkflowNavigation() {
                 Script Creation
               </h3>
             </div>
-            <div className="flex flex-nowrap overflow-x-auto pb-2 gap-2">
+            <div className="flex flex-nowrap overflow-x-auto py-2 gap-2 px-1">
               {scriptCreationSteps.map((step) => renderWorkflowStep(step))}
             </div>
           </div>
@@ -236,7 +236,7 @@ export function EnhancedWorkflowNavigation() {
                 Production
               </h3>
             </div>
-            <div className="flex flex-nowrap overflow-x-auto pb-2 gap-2">
+            <div className="flex flex-nowrap overflow-x-auto py-2 gap-2 px-1">
               {productionSteps.map((step) => renderWorkflowStep(step))}
             </div>
           </div>
@@ -256,14 +256,14 @@ export function EnhancedWorkflowNavigation() {
                 Image Generation
               </h3>
             </div>
-            <div className="flex flex-nowrap overflow-x-auto pb-2 gap-2">
+            <div className="flex flex-nowrap overflow-x-auto py-2 gap-2 px-1">
               {generationSteps.map((step) => renderWorkflowStep(step))}
             </div>
           </div>
         </div>
 
         <div>
-          <div className="flex flex-nowrap overflow-x-auto pb-2 gap-2">
+          <div className="flex flex-nowrap overflow-x-auto py-2 gap-2">
             {utilitySteps.map((step) => renderWorkflowStep(step))}
           </div>
         </div>

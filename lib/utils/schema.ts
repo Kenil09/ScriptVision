@@ -45,3 +45,9 @@ export const subjectSchema = z.object({
     })
   ),
 });
+
+export const promptGenerationSchema = z.object({
+  concise: z.string(),
+  normal: z.string(),
+  detailed: z.string(),
+});

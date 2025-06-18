@@ -7,9 +7,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useScriptCreationStore } from '@/lib/stores/script-creation-store';
+import { Eraser } from "lucide-react";
+import { Button } from "../ui/button";
 
 const YoutubeFilterBar = () => {
-  const { searchParams, setSearchParams } = useScriptCreationStore();
+  const { searchParams, setSearchParams, clearFilters } = useScriptCreationStore();
   return (
     <div className="flex gap-2">
       <div className="w-full flex flex-col gap-2">
@@ -58,27 +60,33 @@ const YoutubeFilterBar = () => {
       <div className="w-full flex flex-col gap-2">
         <label htmlFor="">Language</label>
         <Input
-          placeholder="Language"
-          value={searchParams.relevanceLanguage}
-          onChange={(e) =>
+          placeholder="e.g., EN, HI, FR"
+          pattern="^[A-Z]{0,2}$"
+          maxLength={2}
+          value={searchParams.relevanceLanguage || ''}
+          onChange={(e) => {
+            const value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
             setSearchParams({
               ...searchParams,
-              relevanceLanguage: e.target.value,
-            })
-          }
+              relevanceLanguage: value,
+            });
+          }}
         />
       </div>
       <div className="w-full flex flex-col gap-2">
         <label htmlFor="">Region Code</label>
         <Input
-          placeholder="Region Code"
-          value={searchParams.regionCode}
-          onChange={(e) =>
+          placeholder="e.g., IN, US, GB"
+          pattern="^[A-Z]{0,2}$"
+          maxLength={2}
+          value={searchParams.regionCode || ''}
+          onChange={(e) => {
+            const value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
             setSearchParams({
               ...searchParams,
-              regionCode: e.target.value,
-            })
-          }
+              regionCode: value,
+            });
+          }}
         />
       </div>
       <div className="w-full flex flex-col gap-2">
@@ -120,6 +128,15 @@ const YoutubeFilterBar = () => {
             <SelectItem value="long">Long (Over 20 minutes)</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+      <div className="w-full max-w-[100px] flex flex-col gap-2 items-end self-end">
+        <Button
+          variant="outline"
+          className="w-full max-w-[80px]"
+          onClick={clearFilters}
+        >
+          <Eraser className="h-5 w-5" />
+        </Button>
       </div>
     </div>
   );

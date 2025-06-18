@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { id: string | number }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   searchField?: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string | number }, TValue>({
   columns,
   data,
   onRowClick,
@@ -41,6 +41,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [selectedRow, setSelectedRow] = useState<TData | null>(null);
 
   const table = useReactTable({
     data,
@@ -101,13 +102,14 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => {
+                    setSelectedRow(row.original);
                     if (onRowClick) onRowClick(row.original);
                     if (onSelect) onSelect(row.original);
                   }}
                   className={
-                    onRowClick || onSelect
-                      ? 'cursor-pointer hover:bg-muted'
-                      : ''
+                    `${onRowClick || onSelect ? 'cursor-pointer hover:bg-muted' : ''} ${
+                      selectedRow === row.original ? 'bg-muted' : ''
+                    }`
                   }
                 >
                   {row.getVisibleCells().map((cell) => (

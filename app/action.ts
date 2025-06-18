@@ -29,6 +29,11 @@ export const searchYouTubeAction = async (
     );
     const data: YoutubeSearchResponse = await response.json();
 
+    // Check if error exists - for research search params validate - region code, langauge
+    if (data.error?.message) {
+      throw new Error(data.error.message || 'YouTube API error');
+    }
+
     const videoIds = data.items.map((video) => video.id.videoId).join(',');
 
     // Fetch statistics for all videos in one API call

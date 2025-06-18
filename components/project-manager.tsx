@@ -36,9 +36,10 @@ export default function ProjectManager() {
     name: string;
     id: string;
   } | null>(null);
-  const [selectedProjectToDelete, setSelectedProjectToDelete] = useState<
-    string | null
-  >(null);
+  const [selectedProjectToDelete, setSelectedProjectToDelete] = useState<{
+    name: string;
+    id: string;
+  } | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -120,12 +121,12 @@ export default function ProjectManager() {
     if (!selectedProjectToDelete) return;
 
     try {
-      await deleteProject(selectedProjectToDelete);
+      await deleteProject(selectedProjectToDelete.id);
       await refreshProjectList();
       setIsDeleteDialogOpen(false);
       toast({
         title: 'Project Deleted',
-        description: `Project "${selectedProjectToDelete}" has been deleted.`,
+        description: `Project "${selectedProjectToDelete.name}" has been deleted.`,
       });
     } catch (error) {
       toast({
@@ -141,7 +142,7 @@ export default function ProjectManager() {
     if (isLoadDialogOpen) {
       setSelectedProjectToLoad({ name: project.name, id: project.id });
     } else if (isDeleteDialogOpen) {
-      setSelectedProjectToDelete(project.name);
+      setSelectedProjectToDelete({ name: project.name, id: project.id });
     }
   };
 

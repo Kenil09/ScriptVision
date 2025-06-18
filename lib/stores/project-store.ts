@@ -20,7 +20,7 @@ import { useScriptCreationStore } from '@/lib/stores/script-creation-store';
 // First, import the loading store at the top of the file
 import { useLoadingStore } from '@/lib/stores/loading-store';
 import { mockDirectorStyles } from '@/lib/utils/project';
-import { shortListSchema, subjectSchema } from '@/lib/utils/schema';
+import { promptGenerationSchema, shortListSchema, subjectSchema } from '@/lib/utils/schema';
 import { z } from 'zod';
 
 interface ProjectState {
@@ -47,7 +47,7 @@ interface ProjectState {
   setScript: (script: string) => void;
   saveProject: () => Promise<void>;
   loadProject: (projectId: string) => Promise<void>;
-  deleteProject: (name: string) => Promise<void>;
+  deleteProject: (projectId: string) => Promise<void>;
   listProjects: () => Promise<Project[]>;
   projects: Project[];
 
@@ -209,10 +209,10 @@ export const useProjectStore = create<ProjectState>()(
         }
       },
 
-      deleteProject: async (name) => {
+      deleteProject: async (projectId) => {
         try {
           const projects = get().projects;
-          const newProjectList = projects.filter((p) => p.name !== name);
+          const newProjectList = projects.filter((p) => p.id !== projectId);
           set({ projects: newProjectList });
         } catch (error) {
           console.error('Error deleting project:', error);
@@ -578,30 +578,44 @@ export const useProjectStore = create<ProjectState>()(
               ([_, value]) => value !== 'none'
             )
           );
-
-          // In a real implementation, this would call an AI service
           const promptContext = {
-            shot,
-            subjects: activeSubjects,
-            style: selectedStyle,
-            directorStyle: selectedDirectorStyle,
-            script,
-            cameraSettings: filteredCameraSettings,
+            subject_info: JSON.stringify(activeSubjects),
+            shot_description: shot.description || '',
+            directors_notes: selectedDirectorStyle ? selectedDirectorStyle.name : '',
+            highlighted_text: shot.notes || '',
+            full_script: script || '',
+            end_parameters: '',
+            style: selectedStyle.name || '',
+            style_prefix: selectedStyle.prefix || '',
+            style_suffix: selectedStyle.suffix || '',
+            director_style: JSON.stringify(selectedDirectorStyle) || '',
+            camera_shot: filteredCameraSettings.shot || '',
+            camera_move: filteredCameraSettings.move || '',
+            camera_size: filteredCameraSettings.size || '',
+            camera_framing: filteredCameraSettings.framing || '',
+            camera_depth_of_field: filteredCameraSettings.depthOfField || '',
+            camera_type: filteredCameraSettings.type || '',
+            camera_name: filteredCameraSettings.name || 'ARRIFLEX 435',
+            script_adherence: 'Strictly adhere to the script details'
           };
 
           // Generate the prompt using AI
-          const promptText = await generateAIResponse(
-            'Generate visual prompts for AI image generation',
-            JSON.stringify(promptContext)
+          const promptResponse = await generateJSONResponse(
+            'visualPrompt',
+            'visual-prompt',
+            promptContext,
+            promptGenerationSchema
           );
-
-          // This is a simplified mock implementation
+          
+          if (!promptResponse.concise || !promptResponse.normal || !promptResponse.detailed) {
+            throw new Error('Failed to generate complete prompt response');
+          }
           const newPrompt: GeneratedPrompt = {
             id: uuidv4(),
             shotId: shot.id,
-            concise: `${selectedStyle.prefix} Medium shot of ${shot.people} in ${shot.location}. ${selectedStyle.suffix}`,
-            normal: `${selectedStyle.prefix} Medium shot of ${shot.people} ${shot.action} in ${shot.location}. Camera follows the movement. ${selectedStyle.suffix}`,
-            detailed: `${selectedStyle.prefix} Medium shot of ${shot.people} ${shot.action} in ${shot.location}. ${shot.description} Camera follows the movement with a slight handheld feel. ${filteredCameraSettings.depthOfField ? filteredCameraSettings.depthOfField + ' depth of field.' : ''} ${selectedStyle.suffix}`,
+            concise: promptResponse.concise,
+            normal: promptResponse.normal,
+            detailed: promptResponse.detailed,
             timestamp: new Date().toISOString(),
           };
 

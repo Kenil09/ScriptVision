@@ -58,6 +58,9 @@ export interface YoutubeSearchResponse {
   etag: string;
   nextPageToken: string;
   regionCode: string;
+  error: {
+    message: string;
+  };
   pageInfo: {
     totalResults: number;
     resultsPerPage: number;
